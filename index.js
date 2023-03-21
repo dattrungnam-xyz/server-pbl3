@@ -2,6 +2,7 @@ import express from 'express';
 import * as dotenv from 'dotenv';
 import cors from 'cors';
 import auth from './routes/auth.js'
+import account from './routes/account.js'
 
 dotenv.config();
 
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 
 app.use('/v1/auth', auth);
+app.use('/v1/account', account);
 
 
 
@@ -17,7 +19,7 @@ app.use('/v1/auth', auth);
 const startServer = async () => {
   try {
    
-    app.listen(8080, () => console.log('Server started on port 8080'));
+    app.listen(8080, () => console.log('server started on port 8080'));
   } catch (error) {
     console.log(error);
   }

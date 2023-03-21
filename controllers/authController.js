@@ -1,10 +1,24 @@
 
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
+import jwt from "jsonwebtoken";
 
+/////aaaa
 const { MAX } = sql;
 
 const authController = {
+
+  generateAccessToken: (id,role) => {
+    return jwt.sign(
+      {
+        id: id,
+        role: role,
+      },
+      process.env.JWT_KEY,
+      { expiresIn: "365d" }
+    );
+  },
+
   loginUser: async (req, res) => {
     try {
       const { username, password } = req.body;
@@ -33,9 +47,10 @@ const authController = {
         return res.status(404).json({ error: "Tên đăng nhập không tồn tại" });
       }
       if (result.password === password) {
+        const token = authController.generateAccessToken(result.id, result.type)
         return res
           .status(200)
-          .json({ ...result, token: "abc", error: "" });
+          .json({ ...result, token: token, error: "" });
       } else {
         return res.status(404).json({ error: "Mật khẩu không chính xác" });
       }
