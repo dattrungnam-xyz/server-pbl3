@@ -12,14 +12,6 @@ const serviceController = {
         .query(
           `SELECT * from DichVu `
         );
-
-
-    //   const result = await {
-       
-    //   };
-
-     // return res.status(200).json({ ...result });
-
       return res.status(200).json(response.recordsets[0]);
     } catch (error) {
       return res.status(500).json(error);
