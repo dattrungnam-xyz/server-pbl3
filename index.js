@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv';
 import cors from 'cors';
 import auth from './routes/auth.js'
 import account from './routes/account.js'
+import service from './routes/service.js'
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(express.json({ limit: '50mb' }));
 
 app.use('/v1/auth', auth);
 app.use('/v1/account', account);
+app.use('/v1/service', service);
 
 
 

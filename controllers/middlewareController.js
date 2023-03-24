@@ -18,15 +18,15 @@ const middlewareController = {
     }
   },
 
-  //   verifyTokenAndAdminAuth: (req, res, next) => {
-  //     middlewareController.verifyToken(req, res, () => {
-  //       if (req.user.id == req.params.id || req.user.admin) {
-  //         next();
-  //       } else {
-  //         return res.status(403).json("You're not allowed to delete other");
-  //       }
-  //     });
-  //   },
+     verifyTokenOnlyAdmin: (req, res, next) => {
+       middlewareController.verifyToken(req, res, () => {
+         if (req.role === "admin") {
+           next();
+        } else {
+          return res.status(401).json("You're not authenticated");
+        }
+      });
+    },
 };
 
 export default middlewareController;

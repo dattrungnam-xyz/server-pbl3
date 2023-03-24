@@ -4,6 +4,22 @@ import pool from "../connectDB.js";
 const { MAX } = sql;
 
 const accountController = {
+  getAllAccount:async (req,res) =>{
+    try {
+    
+      const response = await pool
+        .request()
+        .query(
+          `SELECT TaiKhoan.IdTaiKhoan,TaiKhoan.TenDangNhap,TaiKhoan.MatKhau, TaiKhoan.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,KhachHang.Avatar from TaiKhoan,KhachHang where KhachHang.IdUser = TaiKhoan.IdTaiKhoan `
+        );
+
+      return res.status(200).json(response.recordsets[0]);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+
+
+  },
   getInfor: async (req, res) => {
     try {
       const id = req.params.id;
