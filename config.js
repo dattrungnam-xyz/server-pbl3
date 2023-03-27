@@ -1,6 +1,6 @@
 
 const config = {
-    database: "pbl3test",
+    database: "pbl3ver2",
     server: "DESKTOP-EQ6048L",
     driver: "msnodesqlv8",
     options: {

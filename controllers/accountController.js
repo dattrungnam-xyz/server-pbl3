@@ -1,26 +1,26 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
-
+import { Account } from "../models/account.js";
 const { MAX } = sql;
 
 const accountController = {
-  getAllAccount:async (req,res) =>{
+  getAllAccount: async (req, res) => {
     try {
-    
       const response = await pool
         .request()
         .query(
           `SELECT TaiKhoan.IdTaiKhoan,TaiKhoan.TenDangNhap,TaiKhoan.MatKhau, TaiKhoan.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,KhachHang.Avatar from TaiKhoan,KhachHang where KhachHang.IdUser = TaiKhoan.IdTaiKhoan `
         );
+      // const account = new Account();
+      // const data = await  account.getAllAccount();
 
       return res.status(200).json(response.recordsets[0]);
+      //  return res.status(200).json({data});
     } catch (error) {
       return res.status(500).json(error);
     }
-
-
   },
-  getInfor: async (req, res) => {
+  getInforAccount: async (req, res) => {
     try {
       const id = req.params.id;
 
@@ -32,21 +32,39 @@ const accountController = {
         return res.status(401).json(`You're not authenticated`);
       }
 
-      const response = await pool
-        .request()
-        .query(
-          `SELECT * from TaiKhoan,KhachHang where IdTaiKhoan = '${id}' and KhachHang.IdUser = TaiKhoan.IdTaiKhoan`
-        );
+      if (req.role === "user") {
+        const response = await pool
+          .request()
+          .query(
+            `SELECT * from TaiKhoan,KhachHang where IdTaiKhoan = '${id}' and KhachHang.IdKhachHang = TaiKhoan.IdTaiKhoan`
+          );
 
-      const result = await {
-        username: response?.recordsets[0][0]?.TenDangNhap.trim(),
-        name: response?.recordsets[0][0]?.HoTen,
-        phone: response?.recordsets[0][0]?.SoDienThoai,
-        address: response?.recordsets[0][0]?.DiaChi,
-        avatar: response?.recordsets[0][0]?.Avatar,
-      };
+        const result = await {
+          username: response?.recordsets[0][0]?.TenDangNhap.trim(),
+          name: response?.recordsets[0][0]?.HoTen,
+          phone: response?.recordsets[0][0]?.SoDienThoai,
+          address: response?.recordsets[0][0]?.DiaChi,
+          avatar: response?.recordsets[0][0]?.Avatar,
+        };
 
-      return res.status(200).json({ ...result });
+        return res.status(200).json({ ...result });
+      } else {
+        const response = await pool
+          .request()
+          .query(
+            `SELECT * from TaiKhoan,NhanVien where IdTaiKhoan = '${id}' and NhanVien.IdNhanVien = TaiKhoan.IdTaiKhoan`
+          );
+
+        const result = await {
+          username: response?.recordsets[0][0]?.TenDangNhap.trim(),
+          name: response?.recordsets[0][0]?.HoTen,
+          phone: response?.recordsets[0][0]?.SoDienThoai,
+          address: response?.recordsets[0][0]?.DiaChi,
+          avatar: response?.recordsets[0][0]?.Avatar,
+        };
+
+        return res.status(200).json({ ...result });
+      }
 
       //res.status(400).json(response.recordsets[0]);
     } catch (error) {
@@ -58,7 +76,7 @@ const accountController = {
     try {
       const { phone, name, avatar, address } = req.body;
       const id = req.params.id;
-      
+
       const response = await pool
         .request()
         .input("IdUser", sql.Int, id)
