@@ -10,7 +10,7 @@ const staffController = {
       const response = await pool
         .request()
         .query(
-          `SELECT * from NhanVien,TaiKhoan where NhanVien.LoaiNhanVien = '1' and TaiKhoan.IdTaiKhoan = NhanVien.IdNhanVien `
+          `SELECT * from NhanVien,NguoiDung where NhanVien.LoaiNhanVien = '1' and NguoiDung.IdTaiKhoan = NhanVien.IdNhanVien `
         );
       return res.status(200).json(response.recordsets[0]);
     } catch (error) {
@@ -32,11 +32,11 @@ const staffController = {
   },
   getAllStaffNotBusy: async (req, res) => {
     try {
-      const {IdGioCat} = req.params
+      const {IdGioCat,Thu,Ca,Day} = req.params
       const response = await pool
         .request()
         .query(
-          `SELECT * from NhanVien where LoaiNhanVien = '1' and IdNhanVien not in (Select IdNhanVien from NhanVienDaCoLichCat where IdGioCat = '${IdGioCat}')  `
+          `SELECT * from NhanVien where LoaiNhanVien = '1' and IdNhanVien not in (Select IdNhanVien from NhanVienDaCoLichCat where IdGioCat = '${IdGioCat}' and NgayCat ='${Day}' ) and IdNhanVien in (Select IdNhanVien from CaLam where Thu = '${Thu}' and Ca = '${Ca}')  `
         );
       return res.status(200).json(response.recordsets[0]);
     } catch (error) {

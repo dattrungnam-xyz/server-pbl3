@@ -9,7 +9,7 @@ const accountController = {
       const response = await pool
         .request()
         .query(
-          `SELECT TaiKhoan.IdTaiKhoan,TaiKhoan.TenDangNhap,TaiKhoan.MatKhau, TaiKhoan.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,KhachHang.Avatar from TaiKhoan,KhachHang where KhachHang.IdUser = TaiKhoan.IdTaiKhoan `
+          `SELECT NguoiDung.IdTaiKhoan,NguoiDung.TenDangNhap,NguoiDung.MatKhau, NguoiDung.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,KhachHang.Avatar from NguoiDung,KhachHang where KhachHang.IdUser = NguoiDung.IdTaiKhoan `
         );
       // const account = new Account();
       // const data = await  account.getAllAccount();
@@ -36,7 +36,7 @@ const accountController = {
         const response = await pool
           .request()
           .query(
-            `SELECT * from TaiKhoan,KhachHang where IdTaiKhoan = '${id}' and KhachHang.IdKhachHang = TaiKhoan.IdTaiKhoan`
+            `SELECT * from NguoiDung,KhachHang where IdTaiKhoan = '${id}' and KhachHang.IdKhachHang = NguoiDung.IdTaiKhoan`
           );
 
         const result = await {
@@ -52,7 +52,7 @@ const accountController = {
         const response = await pool
           .request()
           .query(
-            `SELECT * from TaiKhoan,NhanVien where IdTaiKhoan = '${id}' and NhanVien.IdNhanVien = TaiKhoan.IdTaiKhoan`
+            `SELECT * from NguoiDung,NhanVien where IdTaiKhoan = '${id}' and NhanVien.IdNhanVien = NguoiDung.IdTaiKhoan`
           );
 
         const result = await {

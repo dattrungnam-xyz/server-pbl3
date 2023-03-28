@@ -30,7 +30,7 @@ const authController = {
       const response = await pool
         .request()
         .query(
-          `SELECT * from TaiKhoan where TenDangNhap = '${username.trim()}' `
+          `SELECT * from NguoiDung where TenDangNhap = '${username.trim()}' `
         );
 
       const result = await {
@@ -130,7 +130,7 @@ const authController = {
         const response = await pool
           .request()
           .query(
-            `SELECT * from TaiKhoan where TenDangNhap = '${username.trim()}'`
+            `SELECT * from NguoiDung where TenDangNhap = '${username.trim()}'`
           );
 
         const result = {

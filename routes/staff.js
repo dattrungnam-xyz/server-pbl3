@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 
-router.get("/barbernotbusy/:IdGioCat", staffController.getAllStaffNotBusy);
+router.get("/barbernotbusy/:IdGioCat&:Thu&:Ca&:Day", staffController.getAllStaffNotBusy);
 router.get("/barber", staffController.getStaffBarBer);
 router.get("/", staffController.getAllStaff);
 
