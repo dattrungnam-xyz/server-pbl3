@@ -1,6 +1,6 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
-import { Account } from "../models/account.js";
+import { NguoiDung } from "../models/NguoiDung.js";
 const { MAX } = sql;
 
 const accountController = {
@@ -9,7 +9,23 @@ const accountController = {
       const response = await pool
         .request()
         .query(
-          `SELECT NguoiDung.IdTaiKhoan,NguoiDung.TenDangNhap,NguoiDung.MatKhau, NguoiDung.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,KhachHang.Avatar from NguoiDung,KhachHang where KhachHang.IdUser = NguoiDung.IdTaiKhoan `
+          `SELECT * from NguoiDung`
+        );
+      // const account = new Account();
+      // const data = await  account.getAllAccount();
+
+      return res.status(200).json(response.recordsets[0]);
+      //  return res.status(200).json({data});
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  getAllAccountUser: async (req, res) => {
+    try {
+      const response = await pool
+        .request()
+        .query(
+          `SELECT NguoiDung.IdTaiKhoan,NguoiDung.TenDangNhap,NguoiDung.MatKhau, NguoiDung.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,NguoiDung.Avatar from NguoiDung,KhachHang where KhachHang.IdKhachHang = NguoiDung.IdTaiKhoan `
         );
       // const account = new Account();
       // const data = await  account.getAllAccount();

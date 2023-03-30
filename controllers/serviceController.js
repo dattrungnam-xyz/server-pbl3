@@ -17,6 +17,19 @@ const serviceController = {
       return res.status(500).json(error);
     }
   },
+  getServiceById: async (req, res) => {
+    try {
+        const id = req.params.id;
+      const response = await pool
+        .request()
+        .query(
+          `SELECT * from DichVu where IdDichVu = '${id}'`
+        );
+      return res.status(200).json(response.recordsets[0]);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
 
   addService: async (req, res) => {
     try {
