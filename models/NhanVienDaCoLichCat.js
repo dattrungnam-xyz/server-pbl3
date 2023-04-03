@@ -10,4 +10,13 @@ export class NhanVienDaCoLichCat {
     );
    
   }
+  
+  async removeNhanVienDaCoLichCat(IdNhanVien, IdGioCat,NgayCat) {
+    const response = await pool.request().query(
+      `
+      DELETE FROM NhanVienDaCoLichCat WHERE IdNhanVien = ${IdNhanVien} and IdGioCat = ${IdGioCat} and NgayCat = '${NgayCat}' ;
+        `
+    );
+   
+  }
 }

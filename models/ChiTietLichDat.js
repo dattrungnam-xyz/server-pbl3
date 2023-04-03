@@ -8,6 +8,13 @@ export class ChiTietLichDat {
         VALUES (${IdLich}, ${IdDichVu} );
         `
     );
-   
+  }
+
+  async removeChiTietLichDat(IdLich) {
+    const response = await pool.request().query(
+      `
+      DELETE FROM ChiTietLichDat WHERE IdLich = ${IdLich};
+        `
+    );
   }
 }

@@ -27,8 +27,8 @@ const serviceController = {
   addService: async (req, res) => {
     try {
       const {
-        Avatar,
-        Description,
+        Avatar="",
+        Description="",
         GiaTien,
 
         LoaiDichVu,
