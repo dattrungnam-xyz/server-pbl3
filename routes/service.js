@@ -9,6 +9,7 @@ const router = express.Router();
 
 
 router.get("/",serviceController.getService);
+router.get("/schedule/:id",serviceController.getServiceByIdLich);
 router.get("/:id",serviceController.getServiceById);
 router.post("/",middlewareController.verifyTokenOnlyAdmin ,serviceController.addService);
 router.post("/:id",middlewareController.verifyTokenOnlyAdmin ,serviceController.updateService);

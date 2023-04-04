@@ -1,13 +1,20 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
+import { DichVu } from "../models/DichVu.js";
 
 const { MAX } = sql;
 
 const serviceController = {
+
   getService: async (req, res) => {
     try {
-      const response = await pool.request().query(`SELECT * from DichVu `);
-      return res.status(200).json(response.recordsets[0]);
+     // const response = await pool.request().query(`SELECT * from DichVu `);
+
+      const dichVu = new DichVu();
+      const data = await dichVu.getAllDichVu();
+
+      return res.status(200).json(data);
+     // return res.status(200).json(response.recordsets[0]);
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -15,10 +22,31 @@ const serviceController = {
   getServiceById: async (req, res) => {
     try {
       const id = req.params.id;
-      const response = await pool
-        .request()
-        .query(`SELECT * from DichVu where IdDichVu = '${id}'`);
-      return res.status(200).json(response.recordsets[0]);
+      // const response = await pool
+      //   .request()
+      //   .query(`SELECT * from DichVu where IdDichVu = '${id}'`);
+
+      const dichVu = new DichVu();
+      const data = await dichVu.getDichVuById(id);
+
+      return res.status(200).json(data);
+     // return res.status(200).json(response.recordsets[0]);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  getServiceByIdLich: async (req, res) => {
+    try {
+      const id = req.params.id;
+      // const response = await pool
+      //   .request()
+      //   .query(`SELECT * from DichVu where IdDichVu = '${id}'`);
+
+      const dichVu = new DichVu();
+      const data = await dichVu.getDichVuByIdLich(id);
+
+      return res.status(200).json(data);
+     // return res.status(200).json(response.recordsets[0]);
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -74,6 +102,8 @@ const serviceController = {
       res.status(500).json({ error: err });
     }
   },
+
+  
 };
 
 export default serviceController;

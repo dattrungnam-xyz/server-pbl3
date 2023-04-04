@@ -33,7 +33,7 @@ export class LichDat {
   }
   async getLichDatByIdKhachHang(IdKhachHang) {
     const response = await pool.request().query(
-      `select LD.IdLich, LD.IdKhachHang, LD.IdNhanVien, LD.NgayDat, LD.NgayCat, LD.IdGioCat,LD.TongThoiGian,
+      `select LD.IdLich, LD.IdKhachHang, LD.IdNhanVien, LD.NgayDat, LD.NgayCat, LD.IdGioCat,LD.TongThoiGian,LD.DaDanhGia,
         GC.GioCat,
         NV.HoTen,NV.DiaChi,NV.SoDienThoai,NV.NamKinhNghiem,
         ND.Avatar
@@ -52,6 +52,14 @@ export class LichDat {
     const response = await pool.request().query(`
       DELETE FROM LichDat WHERE IdLich = ${IdLich};
       `);
+    return response.recordsets[0];
+  }
+  async setStatusRating(IdLich) {
+    const response = await pool.request().query(`
+          UPDATE LichDat
+          SET DaDanhGia = 1
+          WHERE IdLich = ${IdLich};
+          `);
     return response.recordsets[0];
   }
 }

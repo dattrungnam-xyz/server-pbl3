@@ -14,6 +14,8 @@ router.get("/user/:id", bookingController.getLichDatByIdKhachHang);
 router.post("/",middlewareController.verifyToken, bookingController.bookingService);
 router.post("/remove",middlewareController.verifyToken, bookingController.RemoveLichDat);
 
+router.post("/rating",middlewareController.verifyToken, bookingController.ratingService);
+
 
 //router.post("/login", bookingController.loginUser);
 

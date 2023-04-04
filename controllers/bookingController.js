@@ -3,19 +3,13 @@ import pool from "../connectDB.js";
 import { LichDat } from "../models/LichDat.js";
 import { ChiTietLichDat } from "../models/ChiTietLichDat.js";
 import { NhanVienDaCoLichCat } from "../models/NhanVienDaCoLichCat.js";
+import { DanhGia } from "../models/DanhGia.js";
 import { NhanVien } from "../models/NhanVien.js";
 
 const { MAX } = sql;
 
-const timeController = {
-  getAllTime: async (req, res) => {
-    try {
-      const response = await pool.request().query(`SELECT * from GioCat `);
-      return res.status(200).json(response.recordsets[0]);
-    } catch (error) {
-      return res.status(500).json(error);
-    }
-  },
+const bookingController = {
+  
   bookingService: async (req, res) => {
     try {
       const {
@@ -111,11 +105,11 @@ const timeController = {
 
       const lichDat = new LichDat();
       const chiTietLichDat = new ChiTietLichDat();
-      const nhanVienDaCoLichCat = new NhanVienDaCoLichCat();
+      const danhgia = new DanhGia(); 
 
       await chiTietLichDat.removeChiTietLichDat(IdLich)
       await lichDat.removeLichDatByIdLich(IdLich)
-
+      await danhgia.deleteDanhGiaByIdLich(IdLich)
 
       
       var totalCa = TongThoiGian / 15;
@@ -139,11 +133,42 @@ const timeController = {
         }
       }
 
+
       return res.status(200).json({ message:"delete succesfully" });
     } catch (error) {
       return res.status(500).json(error);
     }
   },
+  getAllTime: async (req, res) => {
+    try {
+      const response = await pool.request().query(`SELECT * from GioCat `);
+      return res.status(200).json(response.recordsets[0]);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  ratingService:  async (req, res) => {
+    try {
+      const {
+          IdLich,
+          SoSaoNV,
+          SoSaoDV,
+          MoTaNV,
+          MoTaDV
+      } = req.body;
+      const danhgia = new DanhGia();
+      const lichdat = new LichDat();
+      
+      await lichdat.setStatusRating(IdLich)
+      await danhgia.AddDanhGia(IdLich,SoSaoNV,SoSaoDV,MoTaNV,MoTaDV);
+
+
+      return res.status(200).json({message:"Rating completed successfully"});
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+
 };
 
-export default timeController;
+export default bookingController;

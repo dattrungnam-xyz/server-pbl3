@@ -1,12 +1,12 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
+import { NhanVien } from "../models/NhanVien.js";
 
 const { MAX } = sql;
 
 const staffController = {
   getStaffBarBer: async (req, res) => {
     try {
-    
       const response = await pool
         .request()
         .query(
@@ -19,12 +19,7 @@ const staffController = {
   },
   getAllStaff: async (req, res) => {
     try {
-    
-      const response = await pool
-        .request()
-        .query(
-          `SELECT * from NhanVien `
-        );
+      const response = await pool.request().query(`SELECT * from NhanVien `);
       return res.status(200).json(response.recordsets[0]);
     } catch (error) {
       return res.status(500).json(error);
@@ -32,7 +27,7 @@ const staffController = {
   },
   getAllStaffNotBusy: async (req, res) => {
     try {
-      const {IdGioCat,Thu,Ca,Day} = req.params
+      const { IdGioCat, Thu, Ca, Day } = req.params;
       const response = await pool
         .request()
         .query(
@@ -43,8 +38,36 @@ const staffController = {
       return res.status(500).json(error);
     }
   },
+  updateInforStaff: async (req, res) => {
+    try {
+      const {
+        DiaChi,
+        HoTen,
+        Id,
+        IdNhanVien,
+        LoaiNhanVien,
+        NamKinhNghiem,
+        SoDienThoai,
+        Luong1Gio,
+      } = req.body;
 
-  
+      const nhanVien = new NhanVien();
+
+      nhanVien.updateInforStaffById(
+        DiaChi,
+        HoTen,
+        Id,
+        IdNhanVien,
+        LoaiNhanVien,
+        NamKinhNghiem,
+        SoDienThoai,
+        Luong1Gio
+      );
+      return res.status(200).json({message: "update completed successfully"});
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
 };
 
 export default staffController;

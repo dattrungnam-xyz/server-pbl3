@@ -6,16 +6,16 @@ const { MAX } = sql;
 const accountController = {
   getAllAccount: async (req, res) => {
     try {
-      const response = await pool
-        .request()
-        .query(
-          `SELECT * from NguoiDung`
-        );
-      // const account = new Account();
-      // const data = await  account.getAllAccount();
+      // const response = await pool
+      //   .request()
+      //   .query(
+      //     `SELECT * from NguoiDung`
+      //   );
+       const account = new NguoiDung();
+       const data = await  account.getAllAccount();
 
-      return res.status(200).json(response.recordsets[0]);
-      //  return res.status(200).json({data});
+      //return res.status(200).json(response.recordsets[0]);
+        return res.status(200).json(data);
     } catch (error) {
       return res.status(500).json(error);
     }

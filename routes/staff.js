@@ -10,8 +10,10 @@ const router = express.Router();
 
 router.get("/barbernotbusy/:IdGioCat&:Thu&:Ca&:Day", staffController.getAllStaffNotBusy);
 router.get("/barber", staffController.getStaffBarBer);
-router.get("/",middlewareController.verifyTokenOnlyAdmin, staffController.getAllStaff);
 
+router.post("/",middlewareController.verifyTokenOnlyAdmin, staffController.updateInforStaff);
+
+router.get("/",middlewareController.verifyTokenOnlyAdmin, staffController.getAllStaff);
 //router.post("/login", staffController.loginUser);
 
 
