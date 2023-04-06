@@ -161,6 +161,28 @@ const authController = {
       res.status(500).json(err);
     }
   },
+   checkTenDangNhap : async function (username) {
+    const response = await pool
+      .request()
+      .query(
+        `SELECT * from NguoiDung where TenDangNhap = '${username.trim()}'`
+      );
+
+    const result = {
+      id: response?.recordsets[0][0]?.IdTaiKhoan,
+      username: response?.recordsets[0][0]?.TenDangNhap.trim(),
+      password: response?.recordsets[0][0]?.MatKhau,
+      type: response?.recordsets[0][0]?.LoaiTaiKhoan,
+    };
+
+    if (!result.id) {
+      return true;
+    }
+    else
+    { return false}
+   
+  }
+
 };
 
 export default authController;

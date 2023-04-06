@@ -9,7 +9,6 @@ import { NhanVien } from "../models/NhanVien.js";
 const { MAX } = sql;
 
 const bookingController = {
-  
   bookingService: async (req, res) => {
     try {
       const {
@@ -105,13 +104,13 @@ const bookingController = {
 
       const lichDat = new LichDat();
       const chiTietLichDat = new ChiTietLichDat();
-      const danhgia = new DanhGia(); 
+      const danhgia = new DanhGia();
 
-      await chiTietLichDat.removeChiTietLichDat(IdLich)
-      await lichDat.removeLichDatByIdLich(IdLich)
-      await danhgia.deleteDanhGiaByIdLich(IdLich)
+      await danhgia.deleteDanhGiaByIdLich(IdLich);
+      await chiTietLichDat.removeChiTietLichDat(IdLich);
+      await lichDat.removeLichDatByIdLich(IdLich);
 
-      
+
       var totalCa = TongThoiGian / 15;
       const totalCatemp = TongThoiGian / 15;
 
@@ -133,12 +132,12 @@ const bookingController = {
         }
       }
 
-
-      return res.status(200).json({ message:"delete succesfully" });
+      return res.status(200).json({ message: "delete succesfully" });
     } catch (error) {
       return res.status(500).json(error);
     }
   },
+
   getAllTime: async (req, res) => {
     try {
       const response = await pool.request().query(`SELECT * from GioCat `);
@@ -147,28 +146,30 @@ const bookingController = {
       return res.status(500).json(error);
     }
   },
-  ratingService:  async (req, res) => {
+  ratingService: async (req, res) => {
     try {
-      const {
-          IdLich,
-          SoSaoNV,
-          SoSaoDV,
-          MoTaNV,
-          MoTaDV
-      } = req.body;
+      const { IdLich, SoSaoNV, SoSaoDV, MoTaNV, MoTaDV } = req.body;
       const danhgia = new DanhGia();
       const lichdat = new LichDat();
-      
-      await lichdat.setStatusRating(IdLich)
-      await danhgia.AddDanhGia(IdLich,SoSaoNV,SoSaoDV,MoTaNV,MoTaDV);
 
+      await lichdat.setStatusRating(IdLich);
+      await danhgia.AddDanhGia(IdLich, SoSaoNV, SoSaoDV, MoTaNV, MoTaDV);
 
-      return res.status(200).json({message:"Rating completed successfully"});
+      return res.status(200).json({ message: "Rating completed successfully" });
     } catch (error) {
       return res.status(500).json(error);
     }
   },
+  getAllInforBooking: async (req, res) => {
+    try {
+      const lichDat = new LichDat();
+      const data = await lichDat.getAllInforLichDat();
 
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
 };
 
 export default bookingController;
