@@ -9,6 +9,7 @@ import staff from './routes/staff.js'
 import user from './routes/user.js'
 import product from './routes/product.js'
 import importProduct from './routes/importProduct.js'
+import bill from './routes/bill.js'
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ app.use('/v1/staff',staff);
 app.use('/v1/user',user);
 app.use('/v1/product',product);
 app.use('/v1/import',importProduct);
+app.use('/v1/bill',bill);
 
 
 

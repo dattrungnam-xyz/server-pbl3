@@ -65,7 +65,7 @@ export class LichDat {
 
   async getAllInforLichDat() {
     const response = await pool.request().query(`
-    select LD.IdLich, LD.IdKhachHang, LD.IdNhanVien, LD.NgayDat, LD.NgayCat, LD.IdGioCat,LD.TongThoiGian,LD.DaDanhGia,
+    select LD.IdLich, LD.IdKhachHang, LD.IdNhanVien, LD.NgayDat, LD.NgayCat, LD.IdGioCat,LD.TongThoiGian,LD.DaDanhGia, LD.DaThanhToan,
     GC.GioCat,
     NV.HoTen as HoTenNV,NV.DiaChi,NV.SoDienThoai,NV.NamKinhNghiem,
     ND1.Avatar as AvatarKH,
@@ -82,12 +82,24 @@ export class LichDat {
           `);
     return response.recordsets[0];
   }
-  async getInforLichDatByIdLich(id){
+  async getInforLichDatByIdLich(id) {
+    const response = await pool
+      .request()
+
+      .query(`SELECT * from LichDat where IdLich = ${id}`);
+    return response.recordsets[0];
+  }
+  async updateThanhToan(id) {
     const response = await pool
       .request()
 
       .query(
-        `SELECT * from LichDat where IdLich = ${id}`
+        `
+      UPDATE LichDat
+      SET DaThanhToan = 1
+      WHERE IdLich = ${id};
+      
+      `
       );
     return response.recordsets[0];
   }
