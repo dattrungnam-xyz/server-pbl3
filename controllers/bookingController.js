@@ -160,6 +160,29 @@ const bookingController = {
       return res.status(500).json(error);
     }
   },
+  getAllRatingService: async (req, res) => {
+    try {
+  
+      const danhgia = new DanhGia();
+      const lichdat = new LichDat();
+
+
+      const dataDanhGia = await danhgia.getAllDanhGia();
+
+      const length = await dataDanhGia.length;
+
+      for(var k = 0 ; k < length; k++)
+      {
+        const inforDetail = await lichdat.getInforDetailLichDatByIdLich(dataDanhGia[k].IdLich)
+        dataDanhGia[k]= await {...dataDanhGia[k],inforDetail: inforDetail}
+      }
+      
+
+      return res.status(200).json(dataDanhGia);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
   getAllInforBooking: async (req, res) => {
     try {
       const lichDat = new LichDat();

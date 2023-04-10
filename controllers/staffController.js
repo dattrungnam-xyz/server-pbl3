@@ -31,7 +31,7 @@ const staffController = {
       const response = await pool
         .request()
         .query(
-          `SELECT * from NhanVien where LoaiNhanVien = '1' and IdNhanVien not in (Select IdNhanVien from NhanVienDaCoLichCat where IdGioCat = '${IdGioCat}' and NgayCat ='${Day}' ) and IdNhanVien in (Select IdNhanVien from CaLam where Thu = '${Thu}' and Ca = '${Ca}') `
+          `SELECT * from NhanVien where LoaiNhanVien = '1' and IdNhanVien not in (Select IdNhanVien from NhanVienDaCoLichCat where IdGioCat = '${IdGioCat}' and NgayCat ='${Day}' ) and IdNhanVien in (Select IdNhanVien from CaLam where Thu = '${Thu}' and Ca = '${Ca}' and AnCaLam = 0 ) `
         );
       return res.status(200).json(response.recordsets[0]);
     } catch (error) {

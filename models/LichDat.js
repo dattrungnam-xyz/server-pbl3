@@ -85,8 +85,27 @@ export class LichDat {
   async getInforLichDatByIdLich(id) {
     const response = await pool
       .request()
-
       .query(`SELECT * from LichDat where IdLich = ${id}`);
+    return response.recordsets[0];
+  }
+  async getInforDetailLichDatByIdLich(id) {
+    const response = await pool
+      .request()
+      .query(`select LD.IdLich, LD.IdKhachHang, LD.IdNhanVien, LD.NgayDat, LD.NgayCat, LD.IdGioCat,LD.TongThoiGian,LD.DaDanhGia, LD.DaThanhToan,
+      GC.GioCat,
+      NV.HoTen as HoTenNV,NV.DiaChi,NV.SoDienThoai,NV.NamKinhNghiem,
+      ND1.Avatar as AvatarKH,
+      ND2.Avatar as AvatarNV,
+      KH.HoTen as HoTenKH
+      from LichDat as LD, NguoiDung as ND1,NguoiDung as ND2, NhanVien as NV,GioCat as GC, KhachHang as KH
+      where
+      LD.IdLich = ${id} and
+      LD.IdNhanVien = ND2.IdTaiKhoan
+        and LD.IdKhachHang = ND1.IdTaiKhoan
+        and ND2.IdTaiKhoan = NV.IdNhanVien
+        and LD.IdGioCat = GC.IdGioCat
+        and KH.IdKhachHang = ND1.IdTaiKhoan
+      order by LD.NgayCat desc`);
     return response.recordsets[0];
   }
   async updateThanhToan(id) {
