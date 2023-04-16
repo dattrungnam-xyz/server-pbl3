@@ -21,4 +21,13 @@ export class ChiTietMuaSanPhamBanKem {
     );
     return response.recordsets[0];
   }
+  async getCountProductSellById(Id){
+    const response = await pool.request().query(`
+    SELECT IdSanPham, Sum(SoLuong) as SoLuongDaBan
+    FROM ChiTietMuaSanPhamBanKem 
+    where IdSanPham = ${Id}
+    GROUP BY IdSanPham;
+    `);
+    return response.recordsets[0];
+}
 }

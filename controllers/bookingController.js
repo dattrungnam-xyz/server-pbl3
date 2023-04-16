@@ -23,6 +23,32 @@ const bookingController = {
         TongThoiGianCat,
       } = req.body;
 
+      const nhanviendacolichcat = new NhanVienDaCoLichCat();
+
+      const busy = await nhanviendacolichcat.getAllInforLichCatByIdNhanVien(
+        IdNhanVien,
+        NgayCat
+      );
+
+      const totalCatemp = TongThoiGianCat / 15;
+
+      let msgError = "";
+
+      for (let u = 0; u < totalCatemp; u++) {
+        if (
+          await busy.some((item) => {
+            if (item.IdGioCat === IdGioCat + u) {
+              msgError = `Nhân viên đã có lịch cắt vào lúc ${item.GioCat}`;
+            }
+            return item.IdGioCat === IdGioCat + u;
+          })
+        ) {
+          return res.status(200).json({
+            error: msgError,
+          });
+        }
+      }
+
       const response = await pool.request()
         .query(`INSERT INTO LichDat (IdNhanVien, IdKhachHang, NgayDat, NgayCat,IdGioCat,TongThoiGian)
         VALUES (${IdNhanVien}, ${IdKhachHang}, '${NgayDat}', '${NgayCat}',${IdGioCat},${TongThoiGianCat});`);
@@ -47,9 +73,6 @@ const bookingController = {
       });
 
       var totalCa = TongThoiGianCat / 15;
-      const totalCatemp = TongThoiGianCat / 15;
-
-      const nhanviendacolichcat = new NhanVienDaCoLichCat();
 
       for (let i = 0; i < totalCa; i++) {
         nhanviendacolichcat.addNhanVienDaCoLichCat(
@@ -70,6 +93,52 @@ const bookingController = {
       return res
         .status(200)
         .json({ error: "", message: "Đặt lịch thành công" });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  test: async (req, res) => {
+    try {
+      const {
+        IdDichVu,
+        NgayCat,
+        NgayDat,
+        IdGioCat,
+        IdNhanVien,
+        IdKhachHang,
+        Ca,
+        ThuNgay,
+        TongThoiGianCat,
+      } = req.body;
+
+      const nhanviendacolichcat = new NhanVienDaCoLichCat();
+
+      const busy = await nhanviendacolichcat.getAllInforLichCatByIdNhanVien(
+        7,
+        "2023-04-15"
+      );
+
+      const totalCatemp = 5;
+
+      let msgError = "";
+
+      for (let u = 0; u < totalCatemp; u++) {
+        if (
+          await busy.some((item) => {
+            if (item.IdGioCat === 46 + u) {
+              msgError = `Nhân viên đã có lịch cắt vào lúc ${item.GioCat}`;
+            }
+            return item.IdGioCat === 46 + u;
+          })
+        ) {
+          return res.status(200).json({
+            error: msgError,
+          });
+        }
+      }
+      return res.status(200).json(busy);
+
+      return res.status(200).json(busy);
     } catch (error) {
       return res.status(500).json(error);
     }
@@ -109,7 +178,6 @@ const bookingController = {
       await danhgia.deleteDanhGiaByIdLich(IdLich);
       await chiTietLichDat.removeChiTietLichDat(IdLich);
       await lichDat.removeLichDatByIdLich(IdLich);
-
 
       var totalCa = TongThoiGian / 15;
       const totalCatemp = TongThoiGian / 15;
@@ -162,21 +230,19 @@ const bookingController = {
   },
   getAllRatingService: async (req, res) => {
     try {
-  
       const danhgia = new DanhGia();
       const lichdat = new LichDat();
-
 
       const dataDanhGia = await danhgia.getAllDanhGia();
 
       const length = await dataDanhGia.length;
 
-      for(var k = 0 ; k < length; k++)
-      {
-        const inforDetail = await lichdat.getInforDetailLichDatByIdLich(dataDanhGia[k].IdLich)
-        dataDanhGia[k]= await {...dataDanhGia[k],inforDetail: inforDetail}
+      for (var k = 0; k < length; k++) {
+        const inforDetail = await lichdat.getInforDetailLichDatByIdLich(
+          dataDanhGia[k].IdLich
+        );
+        dataDanhGia[k] = await { ...dataDanhGia[k], inforDetail: inforDetail };
       }
-      
 
       return res.status(200).json(dataDanhGia);
     } catch (error) {

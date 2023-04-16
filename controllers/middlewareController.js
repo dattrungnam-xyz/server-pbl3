@@ -18,15 +18,24 @@ const middlewareController = {
     }
   },
 
-     verifyTokenOnlyAdmin: (req, res, next) => {
-       middlewareController.verifyToken(req, res, () => {
-         if (req.role === "admin") {
-           next();
-        } else {
-          return res.status(401).json("You're not authenticated");
-        }
-      });
-    },
+  verifyTokenOnlyAdmin: (req, res, next) => {
+    middlewareController.verifyToken(req, res, () => {
+      if (req.role === "admin") {
+        next();
+      } else {
+        return res.status(401).json("You're not authenticated");
+      }
+    });
+  },
+  verifyTokenAdminAndStaff: (req, res, next) => {
+    middlewareController.verifyToken(req, res, () => {
+      if (req.role === "admin" || req.role === "staff") {
+        next();
+      } else {
+        return res.status(401).json("You're not authenticated");
+      }
+    });
+  },
 };
 
 export default middlewareController;

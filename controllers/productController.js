@@ -1,6 +1,8 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
 import { SanPhamBanKem } from "../models/SanPhamBanKem.js";
+import { DonNhapChiTiet } from "../models/DonNhapChiTiet.js";
+import { ChiTietMuaSanPhamBanKem } from "../models/ChiTietMuaSanPhamBanKem.js";
 
 const { MAX } = sql;
 
@@ -10,8 +12,33 @@ const productController = {
       // const response = await pool.request().query(`SELECT * from DichVu `);
 
       const sanPhamBanKem = new SanPhamBanKem();
+      const donNhapChiTiet = new DonNhapChiTiet();
+      const chiTietMuaSanPhamBanKem = new ChiTietMuaSanPhamBanKem();
 
       const data = await sanPhamBanKem.getAllSanPhamBanKem();
+
+      const length = await data.length
+      for(let i = 0; i < length; i ++)
+      {
+        const soLuongNhap = await donNhapChiTiet.getCountProductImportById(data[i].IdSanPham)
+
+        data[i] = await {
+          ...data[i],
+          SoLuongNhap: soLuongNhap[0]
+        }
+        
+      }
+
+      for(let i = 0; i < length; i ++)
+      {
+        const soLuongBan = await chiTietMuaSanPhamBanKem.getCountProductSellById(data[i].IdSanPham)
+        data[i] = await {
+          ...data[i],
+          SoLuongDaBan: soLuongBan[0]
+        }
+        
+      }
+      
 
       return res.status(200).json(data);
       // return res.status(200).json(response.recordsets[0]);

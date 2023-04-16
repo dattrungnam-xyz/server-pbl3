@@ -27,4 +27,17 @@ export class DonNhapChiTiet {
             VALUES (${IdDonNhap}, ${IdSanPham}, ${SoLuong});
             `);
   }
+  async getCountProductImportById(Id) {
+    const response = await pool
+      .request()
+      .query(
+        `
+        SELECT IdSanPham, Sum(SoLuong) as SoLuongNhap
+        FROM DonNhapChiTiet 
+      where IdSanPham = ${Id}
+        GROUP BY IdSanPham;
+        `
+      );
+    return response.recordsets[0];
+  }
 }

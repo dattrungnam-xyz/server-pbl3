@@ -9,6 +9,7 @@ const router = express.Router();
 
 
 router.get("/", middlewareController.verifyTokenOnlyAdmin,shiftController.getAllShift);
+router.post("/", middlewareController.verifyTokenOnlyAdmin,shiftController.updateShift);
 
 //router.post("/login", staffController.loginUser);
 

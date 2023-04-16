@@ -24,4 +24,5 @@ export class SanPhamBanKem {
       WHERE IdSanPham=${id};`);
     return response.recordsets[0];
   }
+
 }

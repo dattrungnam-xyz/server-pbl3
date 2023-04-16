@@ -21,8 +21,9 @@ router.post("/remove",middlewareController.verifyToken, bookingController.Remove
 
 
 router.post("/rating",middlewareController.verifyToken, bookingController.ratingService);
-router.get("/rating",middlewareController.verifyTokenOnlyAdmin, bookingController.getAllRatingService);
+router.get("/rating",middlewareController.verifyTokenAdminAndStaff, bookingController.getAllRatingService);
 
+router.get("/test",bookingController.test)
 
 //router.post("/login", bookingController.loginUser);
 

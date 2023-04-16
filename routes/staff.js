@@ -9,6 +9,9 @@ const router = express.Router();
 
 
 router.get("/barbernotbusy/:IdGioCat&:Thu&:Ca&:Day", staffController.getAllStaffNotBusy);
+
+router.post("/checkbusy", staffController.checkBusy);
+
 router.get("/barber", staffController.getStaffBarBer);
 
 router.post("/",middlewareController.verifyTokenOnlyAdmin, staffController.updateInforStaff);

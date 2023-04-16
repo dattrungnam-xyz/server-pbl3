@@ -68,6 +68,18 @@ const staffController = {
       return res.status(500).json(error);
     }
   },
+  checkBusy: async (req, res) => {
+    try {
+     
+      const nhanVien = new NhanVien();
+
+     
+      return res.status(200).json({message: "update completed successfully"});
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  
 };
 
 export default staffController;
