@@ -1,26 +1,56 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
 import { NhanVien } from "../models/NhanVien.js";
+import { DanhGia } from "../models/DanhGia.js";
 
 const { MAX } = sql;
 
 const staffController = {
   getStaffBarBer: async (req, res) => {
     try {
-      const response = await pool
-        .request()
-        .query(
-          `SELECT * from NhanVien,NguoiDung where NhanVien.LoaiNhanVien = '1' and NguoiDung.IdTaiKhoan = NhanVien.IdNhanVien `
-        );
-      return res.status(200).json(response.recordsets[0]);
+      const nhanVien = new NhanVien();
+      const data = await nhanVien.getAllNhanVien();
+      let length =  await data.length;
+      const danhGia = new DanhGia();
+
+      for (let i = 0 ; i < length; i++)
+      {
+        const temp = await danhGia.getSumDanhGiaByIdNhanVien(data[i].IdNhanVien)
+        data[i] = await {...data[i], TongSoSao: temp[0]}
+      }
+      for (let i = 0 ; i < length; i++)
+      {
+        const temp = await danhGia.getCountDanhGiaByIdNhanVien(data[i].IdNhanVien)
+        data[i] = await {...data[i], TongSoLuotDanhGia: temp[0]}
+      }
+      return res.status(200).json(data);
     } catch (error) {
       return res.status(500).json(error);
     }
   },
   getAllStaff: async (req, res) => {
     try {
-      const response = await pool.request().query(`SELECT * from NhanVien `);
-      return res.status(200).json(response.recordsets[0]);
+     
+
+
+      const nhanVien = new NhanVien()
+      const data = await nhanVien.getAllInforNhanVien()
+
+      let length =  await data.length;
+      const danhGia = new DanhGia();
+
+      for (let i = 0 ; i < length; i++)
+      {
+        const temp = await danhGia.getSumDanhGiaByIdNhanVien(data[i].IdNhanVien)
+        data[i] = await {...data[i], TongSoSao: temp[0]}
+      }
+      for (let i = 0 ; i < length; i++)
+      {
+        const temp = await danhGia.getCountDanhGiaByIdNhanVien(data[i].IdNhanVien)
+        data[i] = await {...data[i], TongSoLuotDanhGia: temp[0]}
+      }
+
+      return res.status(200).json(data);
     } catch (error) {
       return res.status(500).json(error);
     }

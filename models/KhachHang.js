@@ -11,4 +11,13 @@ export class KhachHang{
           );
         return response.recordsets[0];
       }
+      async getKhachHangById(id) {
+        const response = await pool
+          .request()
+    
+          .query(
+            `SELECT * from KhachHang where IdKhachHang = ${id}`
+          );
+        return response.recordsets[0];
+      }
 }

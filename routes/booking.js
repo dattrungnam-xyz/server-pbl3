@@ -12,8 +12,10 @@ router.get("/time", bookingController.getAllTime);
 
 router.get("/", middlewareController.verifyTokenOnlyAdmin,bookingController.getAllInforBooking);
 
-router.get("/staff/:id", bookingController.getLichDatByIdNhanVien);
-router.get("/user/:id", bookingController.getLichDatByIdKhachHang);
+router.get("/staff/:id",middlewareController.verifyToken , bookingController.getLichDatByIdNhanVien);
+router.get("/user/:id",middlewareController.verifyToken , bookingController.getLichDatByIdKhachHang);
+
+router.get("/infor/:id",middlewareController.verifyToken ,bookingController.getInforBookingByIdLich);
 
 router.post("/",middlewareController.verifyToken, bookingController.bookingService);
 

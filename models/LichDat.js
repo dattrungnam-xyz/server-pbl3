@@ -122,4 +122,5 @@ export class LichDat {
       );
     return response.recordsets[0];
   }
+  
 }

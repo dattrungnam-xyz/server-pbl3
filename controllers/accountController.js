@@ -1,6 +1,8 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
 import { NguoiDung } from "../models/NguoiDung.js";
+import { KhachHang } from "../models/KhachHang.js";
+import { NhanVien } from "../models/NhanVien.js";
 const { MAX } = sql;
 
 const accountController = {
@@ -12,8 +14,24 @@ const accountController = {
       //     `SELECT * from NguoiDung`
       //   );
        const account = new NguoiDung();
-       const data = await  account.getAllAccount();
+      const khachHang = new KhachHang();
+      const nhanVien = new NhanVien();
 
+       const data = await  account.getAllAccount();
+        const length = await data.length;
+        for(let i = 0 ; i < length ; i++)
+        {
+          if (data[i].LoaiTaiKhoan === "user")
+          {
+            const temp = await khachHang.getKhachHangById(data[i].IdTaiKhoan)
+            data[i] = await {...data[i], Infor:temp[0]}
+          }
+          if (data[i].LoaiTaiKhoan !== "user")
+          {
+            const temp = await nhanVien.getNhanVienById(data[i].IdTaiKhoan)
+            data[i] = await {...data[i], Infor:temp[0]}
+          }
+        }
       //return res.status(200).json(response.recordsets[0]);
         return res.status(200).json(data);
     } catch (error) {

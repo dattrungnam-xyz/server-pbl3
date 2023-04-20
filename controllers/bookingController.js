@@ -259,6 +259,18 @@ const bookingController = {
       return res.status(500).json(error);
     }
   },
+  getInforBookingByIdLich: async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const lichDat = new LichDat();
+      const data = await lichDat.getInforLichDatByIdLich(id)
+     
+      return res.status(200).json(data);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
 };
 
 export default bookingController;

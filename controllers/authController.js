@@ -1,7 +1,8 @@
 import sql from "mssql/msnodesqlv8.js";
 import pool from "../connectDB.js";
 import jwt from "jsonwebtoken";
-
+import { NguoiDung } from "../models/NguoiDung.js";
+import { NhanVien } from "../models/NhanVien.js";
 /////aaaa
 const { MAX } = sql;
 
@@ -20,12 +21,6 @@ const authController = {
   loginUser: async (req, res) => {
     try {
       const { username, password } = req.body;
-
-      // const response = await pool
-      //   .request()
-      //   .query(
-      //     `SELECT * from TaiKhoan,KhachHang where TenDangNhap = '${username.trim()}' and KhachHang.IdKhachHang = TaiKhoan.IdTaiKhoan`
-      //   );
 
       const response = await pool
         .request()
@@ -161,28 +156,49 @@ const authController = {
       res.status(500).json(err);
     }
   },
-   checkTenDangNhap : async function (username) {
-    const response = await pool
-      .request()
-      .query(
-        `SELECT * from NguoiDung where TenDangNhap = '${username.trim()}'`
-      );
+  
+  registerStaff: async (req, res) => {
+    try {
+      const { TenDangNhap, MatKhau, LoaiTaiKhoan, HoTen, SoDienThoai,DiaChi,NamKinhNghiem,LoaiNhanVien } = req.body;
+      const nguoiDung = new NguoiDung()
+      const nhanVien = new NhanVien()
 
-    const result = {
-      id: response?.recordsets[0][0]?.IdTaiKhoan,
-      username: response?.recordsets[0][0]?.TenDangNhap.trim(),
-      password: response?.recordsets[0][0]?.MatKhau,
-      type: response?.recordsets[0][0]?.LoaiTaiKhoan,
-    };
+      const checkUserName = function (response) {
+       
+        const result = {
+          IdTaiKhoan: response[0]?.IdTaiKhoan,
+          TenDangNhap: response[0]?.TenDangNhap.trim(),
+          MatKhau: response[0]?.MatKhau,
+          LoaiTaiKhoan: response[0]?.LoaiTaiKhoan,
+        };
 
-    if (!result.id) {
-      return true;
+        if (!result.IdTaiKhoan) {
+          return true;
+        }
+        if (result.TenDangNhap === TenDangNhap) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+
+      const response = await nguoiDung.checkExistUsername(TenDangNhap)
+
+      if (await checkUserName(response)) {
+          
+         const data = await nguoiDung.addUser(TenDangNhap,MatKhau,LoaiTaiKhoan);
+
+        await nhanVien.addNhanVien(data[0].IdNhanVien, HoTen, SoDienThoai, DiaChi,NamKinhNghiem,LoaiNhanVien)
+
+        return res.status(201).json({ message:"Thêm nhân viên thành công",error: "" });
+        
+      } else {
+        return res.status(400).json({ error: "Tên đăng nhập đã tồn tại" });
+      }
+    } catch (err) {
+      res.status(500).json(err);
     }
-    else
-    { return false}
-   
-  }
-
+  },
 };
 
 export default authController;
