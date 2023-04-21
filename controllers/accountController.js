@@ -40,15 +40,12 @@ const accountController = {
   },
   getAllAccountUser: async (req, res) => {
     try {
-      const response = await pool
-        .request()
-        .query(
-          `SELECT NguoiDung.IdTaiKhoan,NguoiDung.TenDangNhap,NguoiDung.MatKhau, NguoiDung.LoaiTaiKhoan,KhachHang.HoTen,KhachHang.SoDienThoai,KhachHang.DiaChi,NguoiDung.Avatar from NguoiDung,KhachHang where KhachHang.IdKhachHang = NguoiDung.IdTaiKhoan `
-        );
+      const nguoiDung = new NguoiDung();
+      const data = await nguoiDung.getAllAccountUser()
       // const account = new Account();
       // const data = await  account.getAllAccount();
 
-      return res.status(200).json(response.recordsets[0]);
+      return res.status(200).json(data);
       //  return res.status(200).json({data});
     } catch (error) {
       return res.status(500).json(error);
@@ -65,36 +62,29 @@ const accountController = {
       if (req.id != req.params.id && req.role !== "admin") {
         return res.status(401).json(`You're not authenticated`);
       }
+      const nguoiDung = new NguoiDung();
 
       if (req.role === "user") {
-        const response = await pool
-          .request()
-          .query(
-            `SELECT * from NguoiDung,KhachHang where IdTaiKhoan = '${id}' and KhachHang.IdKhachHang = NguoiDung.IdTaiKhoan`
-          );
+        const response = await nguoiDung.getInforAccountUser(id)
+        
 
         const result = await {
-          username: response?.recordsets[0][0]?.TenDangNhap.trim(),
-          name: response?.recordsets[0][0]?.HoTen,
-          phone: response?.recordsets[0][0]?.SoDienThoai,
-          address: response?.recordsets[0][0]?.DiaChi,
-          avatar: response?.recordsets[0][0]?.Avatar,
+          username: response[0]?.TenDangNhap.trim(),
+          name: response[0]?.HoTen,
+          phone: response[0]?.SoDienThoai,
+          address: response[0]?.DiaChi,
+          avatar: response[0]?.Avatar,
         };
 
         return res.status(200).json({ ...result });
       } else {
-        const response = await pool
-          .request()
-          .query(
-            `SELECT * from NguoiDung,NhanVien where IdTaiKhoan = '${id}' and NhanVien.IdNhanVien = NguoiDung.IdTaiKhoan`
-          );
-
+        const response = await nguoiDung.getInforAccountStaff(id)
         const result = await {
-          username: response?.recordsets[0][0]?.TenDangNhap.trim(),
-          name: response?.recordsets[0][0]?.HoTen,
-          phone: response?.recordsets[0][0]?.SoDienThoai,
-          address: response?.recordsets[0][0]?.DiaChi,
-          avatar: response?.recordsets[0][0]?.Avatar,
+          username: response[0]?.TenDangNhap.trim(),
+          name: response[0]?.HoTen,
+          phone: response[0]?.SoDienThoai,
+          address: response[0]?.DiaChi,
+          avatar: response[0]?.Avatar,
         };
 
         return res.status(200).json({ ...result });

@@ -70,13 +70,10 @@ const authController = {
           };
 
           return res.status(200).json({ ...result2, token: token, error: "" });
-        }
-        else{
+        } else {
           const response = await pool
             .request()
-            .query(
-              `SELECT * from NhanVien where IdNhanVien = '${result.id}' `
-            );
+            .query(`SELECT * from NhanVien where IdNhanVien = '${result.id}' `);
           const result2 = await {
             ...result,
             name: response?.recordsets[0][0]?.HoTen,
@@ -156,15 +153,23 @@ const authController = {
       res.status(500).json(err);
     }
   },
-  
+
   registerStaff: async (req, res) => {
     try {
-      const { TenDangNhap, MatKhau, LoaiTaiKhoan, HoTen, SoDienThoai,DiaChi,NamKinhNghiem,LoaiNhanVien } = req.body;
-      const nguoiDung = new NguoiDung()
-      const nhanVien = new NhanVien()
+      const {
+        TenDangNhap,
+        MatKhau,
+        LoaiTaiKhoan,
+        HoTen,
+        SoDienThoai,
+        DiaChi,
+        NamKinhNghiem,
+        LoaiNhanVien,
+      } = req.body;
+      const nguoiDung = new NguoiDung();
+      const nhanVien = new NhanVien();
 
       const checkUserName = function (response) {
-       
         const result = {
           IdTaiKhoan: response[0]?.IdTaiKhoan,
           TenDangNhap: response[0]?.TenDangNhap.trim(),
@@ -182,19 +187,58 @@ const authController = {
         }
       };
 
-      const response = await nguoiDung.checkExistUsername(TenDangNhap)
+      const response = await nguoiDung.checkExistUsername(TenDangNhap);
 
       if (await checkUserName(response)) {
-          
-         const data = await nguoiDung.addUser(TenDangNhap,MatKhau,LoaiTaiKhoan);
+        const data = await nguoiDung.addUser(
+          TenDangNhap,
+          MatKhau,
+          LoaiTaiKhoan
+        );
 
-        await nhanVien.addNhanVien(data[0].IdNhanVien, HoTen, SoDienThoai, DiaChi,NamKinhNghiem,LoaiNhanVien)
+        await nhanVien.addNhanVien(
+          data[0].IdNhanVien,
+          HoTen,
+          SoDienThoai,
+          DiaChi,
+          NamKinhNghiem,
+          LoaiNhanVien
+        );
 
-        return res.status(201).json({ message:"Thêm nhân viên thành công",error: "" });
-        
+        return res
+          .status(201)
+          .json({ message: "Thêm nhân viên thành công", error: "" });
       } else {
         return res.status(400).json({ error: "Tên đăng nhập đã tồn tại" });
       }
+    } catch (err) {
+      res.status(500).json(err);
+    }
+  },
+  changePassword: async (req, res) => {
+    try {
+      const { oldPassword, newPassword, confirmPassword } = req.body;
+      const { idNguoiDung } = req.params;
+      const id = req.id
+
+ 
+
+      if (+idNguoiDung !== +id) {
+        return res.status(400).json({ error: "Truy cập không hợp lệ" });
+      }
+
+      const nguoiDung = new NguoiDung();
+      const data = await nguoiDung.getAccountById(id);
+
+      if ((await data[0].MatKhau) !== oldPassword.toString()) {
+        return res.status(400).json({ error: "Mật khẩu cũ không chính xác" });
+      } else {
+        nguoiDung.updatePassword(id, newPassword);
+      }
+
+      return res
+        .status(201)
+        .json({ message: "Thay đổi mật khẩu thành công", error: "" });
     } catch (err) {
       res.status(500).json(err);
     }

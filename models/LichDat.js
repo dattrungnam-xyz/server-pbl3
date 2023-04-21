@@ -1,6 +1,19 @@
 import pool from "../connectDB.js";
 
 export class LichDat {
+  async addLichDat(IdNhanVien,IdKhachHang, NgayDat, NgayCat,IdGioCat,TongThoiGianCat)
+  {
+    const response = await pool
+      .request()
+
+      .query(
+        `INSERT INTO LichDat (IdNhanVien, IdKhachHang, NgayDat, NgayCat,IdGioCat,TongThoiGian)
+        VALUES (${IdNhanVien}, ${IdKhachHang}, '${NgayDat}', '${NgayCat}',${IdGioCat},${TongThoiGianCat});
+        SELECT SCOPE_IDENTITY() as IdLich
+        `
+      );
+      return response.recordsets[0];
+  }
   async getIdLichDat(IdNhanVien, IdKhachHang, NgayDat, NgayCat, IdGioCat) {
     const response = await pool
       .request()

@@ -48,23 +48,20 @@ const bookingController = {
           });
         }
       }
-
-      const response = await pool.request()
-        .query(`INSERT INTO LichDat (IdNhanVien, IdKhachHang, NgayDat, NgayCat,IdGioCat,TongThoiGian)
-        VALUES (${IdNhanVien}, ${IdKhachHang}, '${NgayDat}', '${NgayCat}',${IdGioCat},${TongThoiGianCat});`);
-
       const lichdat = new LichDat();
 
-      // const data = await lichdat.getIdLichDat(IdNhanVien, IdKhachHang, NgayDat, NgayCat, IdGioCat)
-      const data = await lichdat.getIdLichDat(
-        IdNhanVien,
-        IdKhachHang,
-        NgayDat,
-        NgayCat,
-        IdGioCat
-      );
+      const response = await lichdat.addLichDat(IdNhanVien,IdKhachHang,NgayDat,NgayCat,IdGioCat,TongThoiGianCat)
 
-      const _IdLich = data[0].IdLich;
+      // // const data = await lichdat.getIdLichDat(IdNhanVien, IdKhachHang, NgayDat, NgayCat, IdGioCat)
+      // const data = await lichdat.getIdLichDat(
+      //   IdNhanVien,
+      //   IdKhachHang,
+      //   NgayDat,
+      //   NgayCat,
+      //   IdGioCat
+      // );
+
+      const _IdLich = response[0].IdLich;
 
       const chitietlichdat = new ChiTietLichDat();
 

@@ -18,11 +18,6 @@ export class DonNhapChiTiet {
   }
   async addDonNhapChiTiet(IdDonNhap, IdSanPham, SoLuong) {
     const response = await pool.request().query(`
-            UPDATE DonNhapChiTiet
-            SET SoLuong = ${SoLuong}
-            WHERE IdDonNhap = ${IdDonNhap} and IdSanPham = ${IdSanPham};
-
-
             INSERT INTO DonNhapChiTiet (IdDonNhap, IdSanPham, SoLuong)
             VALUES (${IdDonNhap}, ${IdSanPham}, ${SoLuong});
             `);

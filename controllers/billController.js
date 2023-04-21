@@ -58,7 +58,6 @@ const billController = {
         const chiTietMuaSanPhamBanKem = new ChiTietMuaSanPhamBanKem();
         const lichDat = new LichDat();
 
-        
         await lichDat.updateThanhToan(inforBill.IdLich);
 
         for (var i = 0; i < dataLength; i++) {
@@ -90,6 +89,16 @@ const billController = {
       }
 
       return res.status(200).json({ message: "add completed successfully" });
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  getProfit: async (req, res) => {
+    try {
+      const hoaDon = new HoaDon();
+      const data = await hoaDon.getProfit();
+
+      return res.status(200).json(data);
     } catch (error) {
       return res.status(500).json(error);
     }

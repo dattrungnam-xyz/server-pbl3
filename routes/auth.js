@@ -9,6 +9,7 @@ const router = express.Router();
 
 
 
+router.post("/changepassword/:idNguoiDung", middlewareController.verifyToken,authController.changePassword);
 router.post("/register", authController.registerUser);
 router.post("/register/staff", middlewareController.verifyTokenOnlyAdmin,authController.registerStaff);
 
