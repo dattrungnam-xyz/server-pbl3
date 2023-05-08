@@ -16,4 +16,11 @@ export class CaLam {
     `);
     return response.recordsets[0];
   }
+  async addCaLam(IdNhanVien,Thu,Ca) {
+    const response = await pool.request().query(`
+    INSERT INTO CaLam (IdNhanVien, Thu, Ca, AnCaLam)
+    VALUES (${IdNhanVien}, '${Thu}', ${Ca}, 0);
+    `);
+    return response.recordsets[0];
+  }
 }

@@ -3,6 +3,7 @@ import pool from "../connectDB.js";
 import jwt from "jsonwebtoken";
 import { NguoiDung } from "../models/NguoiDung.js";
 import { NhanVien } from "../models/NhanVien.js";
+import { CaLam } from "../models/CaLam.js";
 /////aaaa
 const { MAX } = sql;
 
@@ -168,7 +169,7 @@ const authController = {
       } = req.body;
       const nguoiDung = new NguoiDung();
       const nhanVien = new NhanVien();
-
+      const calam = new CaLam();
       const checkUserName = function (response) {
         const result = {
           IdTaiKhoan: response[0]?.IdTaiKhoan,
@@ -204,6 +205,14 @@ const authController = {
           NamKinhNghiem,
           LoaiNhanVien
         );
+
+        for(let  u = 0 ; u<=6; u++)
+        {
+          for (let k = 1; k<=3; k++)
+          {
+            await calam.addCaLam(data[0].IdNhanVien,u,k);
+          }
+        }
 
         return res
           .status(201)
