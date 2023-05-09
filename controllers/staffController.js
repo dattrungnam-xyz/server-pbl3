@@ -109,6 +109,17 @@ const staffController = {
       return res.status(500).json(error);
     }
   },
+  removeStaff: async (req, res) => {
+    try {
+      const id = req.params.id;
+      const nhanVien = new NhanVien();
+      await nhanVien.removeNhanVien(id)
+     
+      return res.status(200).json({message: "update completed successfully"});
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
   
 };
 

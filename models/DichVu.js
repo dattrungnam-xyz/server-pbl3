@@ -22,5 +22,12 @@ export class DichVu {
       );
     return response.recordsets[0];
   }
-
+  async removeDichVu(id){
+    const response = await pool
+    .request()
+    .query(`UPDATE DichVu
+    SET An = 1
+    WHERE IdDichVu = ${id};`);
+    return response.recordsets[0];
+}
 }

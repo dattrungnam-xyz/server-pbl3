@@ -48,4 +48,13 @@ export class NhanVien {
       `);
     return response.recordsets[0];
   }
+  async removeNhanVien(IdNhanVien)
+  {
+    const response = await pool
+    .request()
+    .query(`UPDATE NhanVien
+    SET An = 1
+    WHERE IdNhanVien = ${IdNhanVien};`);
+  return response.recordsets[0];
+  }
 }

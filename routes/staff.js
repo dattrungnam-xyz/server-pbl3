@@ -16,6 +16,8 @@ router.get("/barber", staffController.getStaffBarBer);
 
 router.post("/",middlewareController.verifyTokenOnlyAdmin, staffController.updateInforStaff);
 
+router.delete("/:id",middlewareController.verifyTokenOnlyAdmin, staffController.removeStaff);
+
 router.get("/",middlewareController.verifyTokenOnlyAdmin, staffController.getAllStaff);
 //router.post("/login", staffController.loginUser);
 

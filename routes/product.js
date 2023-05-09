@@ -13,6 +13,7 @@ router.get("/:id",middlewareController.verifyTokenOnlyAdmin ,productController.g
 
 router.post("/",middlewareController.verifyTokenOnlyAdmin ,productController.addProduct);
 router.post("/:id",middlewareController.verifyTokenOnlyAdmin ,productController.updateProduct);
+router.delete("/:id",middlewareController.verifyTokenOnlyAdmin ,productController.removeProduct);
 
 
 

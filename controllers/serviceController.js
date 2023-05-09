@@ -19,6 +19,19 @@ const serviceController = {
       return res.status(500).json(error);
     }
   },
+  removeService: async (req, res) => {
+    try {
+     // const response = await pool.request().query(`SELECT * from DichVu `);
+      const id = req.params.id;
+      const dichVu = new DichVu();
+      await dichVu.removeDichVu(id);
+      
+      return res.status(200).json({message:"remove successfully"});
+     // return res.status(200).json(response.recordsets[0]);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
   getServiceById: async (req, res) => {
     try {
       const id = req.params.id;

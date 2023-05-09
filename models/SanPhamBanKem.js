@@ -5,6 +5,15 @@ export class SanPhamBanKem {
     const response = await pool.request().query(`SELECT * from SanPhamBanKem`);
     return response.recordsets[0];
   }
+  async removeProduct(id) {
+    const response = await pool.request().query(`
+    UPDATE SanPhamBanKem
+    SET An = 1
+    WHERE IdSanPham = ${id} ;
+    
+    `);
+    return response.recordsets[0];
+  }
   async getProductByIdProduct(idProduct) {
     const response = await pool
       .request()

@@ -7,6 +7,7 @@ import { ChiTietMuaSanPhamBanKem } from "../models/ChiTietMuaSanPhamBanKem.js";
 const { MAX } = sql;
 
 const productController = {
+
   getAllProduct: async (req, res) => {
     try {
       // const response = await pool.request().query(`SELECT * from DichVu `);
@@ -91,6 +92,22 @@ const productController = {
       const data = await sanPhamBanKem.updateProductById(id,TenSanPham,GiaBan,GiaNhap);
 
       return res.status(200).json({message: "Update product completed successfully"});
+      // return res.status(200).json(response.recordsets[0]);
+    } catch (error) {
+      return res.status(500).json(error);
+    }
+  },
+  removeProduct: async (req,res)=>{
+    try {
+      // const response = await pool.request().query(`SELECT * from DichVu `);
+    
+      const id = req.params.id;
+
+      const sanPhamBanKem = new SanPhamBanKem();
+
+      await sanPhamBanKem.removeProduct(id);
+
+      return res.status(200).json({message: "delete product completed successfully"});
       // return res.status(200).json(response.recordsets[0]);
     } catch (error) {
       return res.status(500).json(error);

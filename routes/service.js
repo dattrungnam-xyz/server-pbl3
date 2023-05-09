@@ -14,6 +14,9 @@ router.get("/:id",serviceController.getServiceById);
 router.post("/",middlewareController.verifyTokenOnlyAdmin ,serviceController.addService);
 router.post("/:id",middlewareController.verifyTokenOnlyAdmin ,serviceController.updateService);
 
+router.delete("/:id",middlewareController.verifyTokenOnlyAdmin ,serviceController.removeService);
+
+
 
 
 
