@@ -17,7 +17,7 @@ const billController = {
 
       const chiTietMuaSanPhamBanKem = new ChiTietMuaSanPhamBanKem();
 
-      for (var i = 0; i < dataLength; i++) {
+      for (let i = 0; i < dataLength; i++) {
         const detailBill =
           await chiTietMuaSanPhamBanKem.getAllChiTietMuaSanPhamBanKem(
             data[i].IdHoaDon
@@ -25,7 +25,7 @@ const billController = {
         data[i] = await { ...data[i], detailBill: detailBill };
       }
       const dichVu = new DichVu();
-      for (var i = 0; i < dataLength; i++) {
+      for (let i = 0; i < dataLength; i++) {
         if (data[i].IdLich) {
           const detailService = await dichVu.getDichVuByIdLich(data[i].IdLich);
           data[i] = await { ...data[i], detailService: detailService };
@@ -53,18 +53,18 @@ const billController = {
         );
         const IdHoaDon = await data[0].IdHoaDon;
 
-        const dataLength = await productData.length;
+        const dataLength = await productData.productData.length;
 
         const chiTietMuaSanPhamBanKem = new ChiTietMuaSanPhamBanKem();
         const lichDat = new LichDat();
 
         await lichDat.updateThanhToan(inforBill.IdLich);
-
-        for (var i = 0; i < dataLength; i++) {
+//////////////////////////////////////////////////////////////
+        for (let i = 0; i < dataLength; i++) {
           await chiTietMuaSanPhamBanKem.addChiTietMuaSanPhamBanKem(
             IdHoaDon,
-            productData[i].IdSanPham,
-            productData[i].SoLuong
+            productData.productData[i].IdSanPham,
+            productData.productData[i].SoLuong
           );
         }
       } else {

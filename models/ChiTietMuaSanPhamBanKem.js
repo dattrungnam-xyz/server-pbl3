@@ -5,7 +5,7 @@ export class ChiTietMuaSanPhamBanKem {
     const response = await pool.request().query(
       `
         select CTMSPBK.IdHoaDon, CTMSPBK.IdSanPham, CTMSPBK.SoLuong, SPBK.GiaBan, SPBK.TenSanPham from ChiTietMuaSanPhamBanKem as CTMSPBK ,SanPhamBanKem as SPBK
-        where IdHoaDon = ${IdHoaDon}
+        where CTMSPBK.IdHoaDon = ${IdHoaDon}
         and CTMSPBK.IdSanPham = SPBK.IdSanPham
         `
     );
